@@ -13,6 +13,7 @@ layout(location = 0) out vec3 outWorldPos;
 layout(location = 1) out vec3 outColor;
 layout(location = 2) out vec3 outNormal;
 layout(location = 3) out noperspective vec2 outUV;
+layout(location = 10) out vec2 outUVAlt;
 layout(location = 4) out mat3 outTBN;
 layout(location = 7) out vec3 outLight;
 layout(location = 9) out float outFog;

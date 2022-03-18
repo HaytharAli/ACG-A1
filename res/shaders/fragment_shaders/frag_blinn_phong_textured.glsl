@@ -40,14 +40,20 @@ void main() {
 
 	// Use the lighting calculation that we included from our partial file
 	vec3 lightAccumulation = CalcAllLightContribution(inWorldPos, normal, u_CamPos.xyz, u_Material.Shininess);
-
+	
+	vec4 textureColor = texture(u_Material.Diffuse, inUVAlt);
 	// Get the albedo from the diffuse / albedo map
-	vec4 textureColor = texture(u_Material.Diffuse, inUV);
-
-	vec3 newLight = inLight;
+	if(IsFlagSet(FLAG_ENABLE_ASC)){
+		textureColor = texture(u_Material.Diffuse, inUV);
+		lightAccumulation = inLight;
+	}
 
 	// combine for the final result
-	vec3 result = newLight  * inColor * textureColor.rgb;
+	vec3 result = lightAccumulation  * inColor * textureColor.rgb;
 
 	frag_color = vec4(ColorCorrect(mix(result, vec3(0.3647, 0.3412, 0.4), inFog)), textureColor.a);
+
+	if(IsFlagSet(FLAG_ENABLE_D)){
+		frag_color = textureColor;
+	}
 }

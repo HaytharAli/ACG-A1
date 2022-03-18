@@ -58,6 +58,7 @@ void main() {
 
 	// Pass our UV coords to the fragment shader
 	outUV = inUV;
+	outUVAlt = inUV;
 
 	///////////
 	outColor = inColor;
