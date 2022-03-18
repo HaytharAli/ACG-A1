@@ -12,8 +12,10 @@ layout(location = 5) in vec3 inBiTangent;
 layout(location = 0) out vec3 outWorldPos;
 layout(location = 1) out vec3 outColor;
 layout(location = 2) out vec3 outNormal;
-layout(location = 3) out vec2 outUV;
+layout(location = 3) out noperspective vec2 outUV;
 layout(location = 4) out mat3 outTBN;
+layout(location = 7) out vec3 outLight;
+layout(location = 9) out float outFog;
 
 // Include the matrices and frame level parameters
 #include "frame_uniforms.glsl"
