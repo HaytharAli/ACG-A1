@@ -13,20 +13,32 @@ struct Material {
 uniform Material u_Material;
 
 void main() {
-	
-	vec2 grid = vec2(427, 240) * 0.5f;
+
 	vec4 vertInClipSpace = u_ModelViewProjection * vec4(inPosition, 1.0);
-	vec4 snapped = vertInClipSpace;
-	snapped.xyz = vertInClipSpace.xyz / vertInClipSpace.w;
-	snapped.xy = floor(grid * snapped.xy) / grid;
-	snapped.xyz *= vertInClipSpace.w;
+	
+	if(IsFlagSet(FLAG_ENABLE_ASC)){
+		vec2 grid = vec2(427, 240) * 0.5f;
+		vec4 snapped = vertInClipSpace;
+		snapped.xyz = vertInClipSpace.xyz / vertInClipSpace.w;
+		snapped.xy = floor(grid * snapped.xy) / grid;
+		snapped.xyz *= vertInClipSpace.w;
 
-	gl_Position = snapped;
+		gl_Position = snapped;
+	}
+	else {
+		gl_Position = vertInClipSpace;
+	}
 
-	vec4 depthVert = (u_View * u_Model) * vec4(inPosition, 1.0);
-	float depth = abs(depthVert.z/depthVert.w);
-	outFog = 1.0 - clamp((2-depth)/(5-2), 0.0, 1.0);
+	if(IsFlagSet(FLAG_ENABLE_ASC)){
+		vec4 depthVert = (u_View * u_Model) * vec4(inPosition, 1.0);
+		float depth = abs(depthVert.z/depthVert.w);
+		outFog = 1.0f - clamp((2-depth)/(5-2), 0.0, 1.0);
+	}
+	else {
+		outFog = 0.0f;
+	}
 
+	
 
 	// Lecture 5
 	// Pass vertex pos in world space to frag shader

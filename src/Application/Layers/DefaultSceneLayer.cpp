@@ -105,7 +105,7 @@ void DefaultSceneLayer::_CreateScene()
 			{ ShaderPartType::Vertex, "shaders/vertex_shaders/basic.glsl" },
 			{ ShaderPartType::Fragment, "shaders/fragment_shaders/frag_blinn_phong_textured.glsl" }
 		});
-		basicShader->SetDebugName("Guarard");
+		basicShader->SetDebugName("PS1");
 #pragma endregion
 #pragma region LoadMeshes
 		// Load in the meshes
