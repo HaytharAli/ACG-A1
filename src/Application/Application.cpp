@@ -69,7 +69,7 @@ Application::Application() :
 	_windowSize({DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT}),
 	_isRunning(false),
 	_isEditor(true),
-	_windowTitle("INFR - 2350U"),
+	_windowTitle("Silent Hill - PSX"),
 	_currentScene(nullptr),
 	_targetScene(nullptr),
 	_renderOutput(nullptr)

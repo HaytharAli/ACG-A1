@@ -48,6 +48,18 @@ void main() {
 		lightAccumulation = inLight;
 	}
 
+	if(IsFlagSet(FLAG_ENABLE_TOON_BULL)){
+		textureColor.r = texture(u_Material.toonTex, textureColor.r).r;
+		textureColor.g = texture(u_Material.toonTex, textureColor.g).g;
+		textureColor.b = texture(u_Material.toonTex, textureColor.b).b;
+	}
+
+	if(IsFlagSet(FLAG_ENABLE_TOON_LIGHT)){
+		lightAccumulation.r = texture(u_Material.toonTex, lightAccumulation.r).r;
+		lightAccumulation.g = texture(u_Material.toonTex, lightAccumulation.g).g;
+		lightAccumulation.b = texture(u_Material.toonTex, lightAccumulation.b).b;
+	}
+
 	// combine for the final result
 	vec3 result = lightAccumulation  * inColor * textureColor.rgb;
 
