@@ -103,3 +103,23 @@ vec3 CalcAllLightContribution(vec3 worldPos, vec3 normal, vec3 camPos, float shi
 
 	return lightAccumulation;
 }
+
+vec3 getAmbient(){
+	return AmbientColAndNumLights.rgb;
+}
+
+vec3 getSpecular(vec3 worldPos, vec3 normal, vec3 camPos, float shininess) {
+    // Will accumulate the contributions of all lights on this fragment
+	vec3 lightAccumulation = vec3(0);
+
+	// Direction between camera and fragment will be shared for all lights
+	vec3 viewDir  = normalize(camPos - worldPos);
+	
+	// Iterate over all lights
+	for(int ix = 0; ix < AmbientColAndNumLights.w && ix < MAX_LIGHTS; ix++) {
+		// Additive lighting model
+		lightAccumulation += CalcPointLightContribution(worldPos, normal, viewDir, Lights[ix], shininess);
+	}
+
+	return lightAccumulation;
+}

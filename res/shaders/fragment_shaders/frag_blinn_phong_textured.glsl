@@ -69,6 +69,9 @@ void main() {
 		frag_color = textureColor;
 	}
 	if(IsFlagSet(FLAG_ENABLE_A)){
-		frag_color = vec4((textureColor.rgb * vec3(0.1, 0.1, 0.1)), textureColor.a);
+		frag_color = vec4((textureColor.rgb * getAmbient()), textureColor.a);
+	}
+	if(IsFlagSet(FLAG_ENABLE_S)){
+		frag_color = vec4((textureColor.rgb * getSpecular(inWorldPos, normal, u_CamPos.xyz, u_Material.Shininess)), textureColor.a);
 	}
 }
