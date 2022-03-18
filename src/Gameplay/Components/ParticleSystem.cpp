@@ -182,7 +182,7 @@ void ParticleSystem::AddEmitter(const glm::vec3& position, const glm::vec3& dire
 	emitter.Velocity = direction;
 	emitter.Lifetime = 1.0f / emitRate; 
 	emitter.Color    = color;
-	emitter.Metadata = { 1.0f / emitRate, 0.0f, 2.0f, 4.0f };
+	emitter.Metadata = { 1.0f / emitRate, 3.14f, 10.0f, 12.0f };
 
 	_emitters.push_back(emitter); 
 }

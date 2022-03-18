@@ -90,12 +90,28 @@ namespace Gameplay {
 		return _skyboxRotation;
 	}
 
-	void Scene::SetColorLUT(const Texture3D::Sptr& texture) {
-		_colorCorrection = texture;
+	void Scene::SetColorLUT(const Texture3D::Sptr& texture, int a) {
+		if (a == 1){
+			_colorCorrectionA = texture;
+		}
+		if (a == 2) {
+			_colorCorrectionB = texture;
+		}
+		if (a == 3) {
+			_colorCorrectionC = texture;
+		}
 	}
 
-	const Texture3D::Sptr& Scene::GetColorLUT() const {
-		return _colorCorrection;
+	const Texture3D::Sptr& Scene::GetColorLUT(int a) const {
+		if (a == 1) {
+			return _colorCorrectionA;
+		}
+		if (a == 2) {
+			return _colorCorrectionB;
+		}
+		if (a == 3) {
+			return _colorCorrectionC;
+		}
 	}
 
 	GameObject::Sptr Scene::CreateGameObject(const std::string& name)

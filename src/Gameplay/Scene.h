@@ -68,8 +68,8 @@ namespace Gameplay {
 		void SetSkyboxRotation(const glm::mat3& value);
 		const glm::mat3& GetSkyboxRotation() const;
 
-		void SetColorLUT(const Texture3D::Sptr& texture);
-		const Texture3D::Sptr& GetColorLUT() const;
+		void SetColorLUT(const Texture3D::Sptr& texture, int a);
+		const Texture3D::Sptr& GetColorLUT(int a) const;
 
 		/**
 		 * Gets whether the scene has already called Awake()
@@ -250,7 +250,9 @@ namespace Gameplay {
 		glm::mat3                     _skyboxRotation;
 
 		// our LUT for color correction
-		Texture3D::Sptr               _colorCorrection;
+		Texture3D::Sptr               _colorCorrectionA;
+		Texture3D::Sptr               _colorCorrectionB;
+		Texture3D::Sptr               _colorCorrectionC;
 
 		/// <summary>
 		/// Represents a c++ struct layout that matches that of

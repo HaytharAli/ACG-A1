@@ -1,5 +1,5 @@
 #include "DefaultSceneLayer.h"
-
+#pragma region includes
 // GLM math library
 #include <GLM/glm.hpp>
 #include <GLM/gtc/matrix_transform.hpp>
@@ -67,6 +67,7 @@
 #include "Gameplay/Components/ParticleSystem.h"
 #include "Graphics/Textures/Texture3D.h"
 #include "Graphics/Textures/Texture1D.h"
+#pragma endregion
 
 DefaultSceneLayer::DefaultSceneLayer() :
 	ApplicationLayer()
@@ -93,79 +94,57 @@ void DefaultSceneLayer::_CreateScene()
 	if (loadScene && std::filesystem::exists("scene.json")) {
 		app.LoadScene("scene.json");
 	} else {
+		// Create an empty scene
+		Scene::Sptr scene = std::make_shared<Scene>();
+
+#pragma region ShaderCompilation
 		// This time we'll have 2 different shaders, and share data between both of them using the UBO
 		// This shader will handle reflective materials 
-		ShaderProgram::Sptr reflectiveShader = ResourceManager::CreateAsset<ShaderProgram>(std::unordered_map<ShaderPartType, std::string>{
-			{ ShaderPartType::Vertex, "shaders/vertex_shaders/basic.glsl" },
-			{ ShaderPartType::Fragment, "shaders/fragment_shaders/frag_environment_reflective.glsl" }
-		});
-		reflectiveShader->SetDebugName("Reflective");
-
 		// This shader handles our basic materials without reflections (cause they expensive)
 		ShaderProgram::Sptr basicShader = ResourceManager::CreateAsset<ShaderProgram>(std::unordered_map<ShaderPartType, std::string>{
 			{ ShaderPartType::Vertex, "shaders/vertex_shaders/basic.glsl" },
 			{ ShaderPartType::Fragment, "shaders/fragment_shaders/frag_blinn_phong_textured.glsl" }
 		});
-		basicShader->SetDebugName("Blinn-phong");
-
-		// This shader handles our basic materials without reflections (cause they expensive)
-		ShaderProgram::Sptr specShader = ResourceManager::CreateAsset<ShaderProgram>(std::unordered_map<ShaderPartType, std::string>{
-			{ ShaderPartType::Vertex, "shaders/vertex_shaders/basic.glsl" },
-			{ ShaderPartType::Fragment, "shaders/fragment_shaders/textured_specular.glsl" }
-		});
-		specShader->SetDebugName("Textured-Specular");
-
-		// This shader handles our foliage vertex shader example
-		ShaderProgram::Sptr foliageShader = ResourceManager::CreateAsset<ShaderProgram>(std::unordered_map<ShaderPartType, std::string>{
-			{ ShaderPartType::Vertex, "shaders/vertex_shaders/foliage.glsl" },
-			{ ShaderPartType::Fragment, "shaders/fragment_shaders/screendoor_transparency.glsl" }
-		});
-		foliageShader->SetDebugName("Foliage");
-
-		// This shader handles our cel shading example
-		ShaderProgram::Sptr toonShader = ResourceManager::CreateAsset<ShaderProgram>(std::unordered_map<ShaderPartType, std::string>{
-			{ ShaderPartType::Vertex, "shaders/vertex_shaders/basic.glsl" },
-			{ ShaderPartType::Fragment, "shaders/fragment_shaders/toon_shading.glsl" }
-		});
-		toonShader->SetDebugName("Toon Shader");
-
-		// This shader handles our displacement mapping example
-		ShaderProgram::Sptr displacementShader = ResourceManager::CreateAsset<ShaderProgram>(std::unordered_map<ShaderPartType, std::string>{
-			{ ShaderPartType::Vertex, "shaders/vertex_shaders/displacement_mapping.glsl" },
-			{ ShaderPartType::Fragment, "shaders/fragment_shaders/frag_tangentspace_normal_maps.glsl" }
-		});
-		displacementShader->SetDebugName("Displacement Mapping");
-
-		// This shader handles our tangent space normal mapping
-		ShaderProgram::Sptr tangentSpaceMapping = ResourceManager::CreateAsset<ShaderProgram>(std::unordered_map<ShaderPartType, std::string>{
-			{ ShaderPartType::Vertex, "shaders/vertex_shaders/basic.glsl" },
-			{ ShaderPartType::Fragment, "shaders/fragment_shaders/frag_tangentspace_normal_maps.glsl" }
-		});
-		tangentSpaceMapping->SetDebugName("Tangent Space Mapping");
-
-		// This shader handles our multitexturing example
-		ShaderProgram::Sptr multiTextureShader = ResourceManager::CreateAsset<ShaderProgram>(std::unordered_map<ShaderPartType, std::string>{
-			{ ShaderPartType::Vertex, "shaders/vertex_shaders/vert_multitextured.glsl" },
-			{ ShaderPartType::Fragment, "shaders/fragment_shaders/frag_multitextured.glsl" }
-		});
-		multiTextureShader->SetDebugName("Multitexturing");
-
+		basicShader->SetDebugName("Guarard");
+#pragma endregion
+#pragma region LoadMeshes
 		// Load in the meshes
-		MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
+		//MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
+		MeshResource::Sptr THR1 = ResourceManager::CreateAsset<MeshResource>("THR0001F.obj");
+		MeshResource::Sptr THR2 = ResourceManager::CreateAsset<MeshResource>("THR0002F.obj");
+		MeshResource::Sptr THR3 = ResourceManager::CreateAsset<MeshResource>("THR0003F.obj");
+		MeshResource::Sptr THR4 = ResourceManager::CreateAsset<MeshResource>("THR0004F.obj");
+		MeshResource::Sptr THF1 = ResourceManager::CreateAsset<MeshResource>("THR1301F.obj");
+		MeshResource::Sptr THF2 = ResourceManager::CreateAsset<MeshResource>("THR1401F.obj");
+		MeshResource::Sptr THF3 = ResourceManager::CreateAsset<MeshResource>("THR1801F.obj");
+#pragma endregion
+#pragma region LoadTextures
+		Texture2D::Sptr TexTHR1 = ResourceManager::CreateAsset<Texture2D>("textures/THR0001F.png");
+		TexTHR1->SetMinFilter(MinFilter::Unknown);
+		TexTHR1->SetMagFilter(MagFilter::Nearest);
+		Texture2D::Sptr TexTHR2 = ResourceManager::CreateAsset<Texture2D>("textures/THR0002F.png");
+		TexTHR2->SetMinFilter(MinFilter::Unknown);
+		TexTHR2->SetMagFilter(MagFilter::Nearest);
+		Texture2D::Sptr TexTHR3 = ResourceManager::CreateAsset<Texture2D>("textures/THR0003F.png");
+		TexTHR3->SetMinFilter(MinFilter::Unknown);
+		TexTHR3->SetMagFilter(MagFilter::Nearest);
+		Texture2D::Sptr TexTHR4 = ResourceManager::CreateAsset<Texture2D>("textures/THR0004F.png");
+		TexTHR4->SetMinFilter(MinFilter::Unknown);
+		TexTHR4->SetMagFilter(MagFilter::Nearest);
+		Texture2D::Sptr TexTHF1 = ResourceManager::CreateAsset<Texture2D>("textures/THR1301F.png");
+		TexTHF1->SetMinFilter(MinFilter::Unknown);
+		TexTHF1->SetMagFilter(MagFilter::Nearest);
+		Texture2D::Sptr TexTHF2 = ResourceManager::CreateAsset<Texture2D>("textures/THR1401F.png");
+		TexTHF2->SetMinFilter(MinFilter::Unknown);
+		TexTHF2->SetMagFilter(MagFilter::Nearest);
+		Texture2D::Sptr TexTHF3 = ResourceManager::CreateAsset<Texture2D>("textures/THR1801F.png");
+		TexTHF3->SetMinFilter(MinFilter::Unknown);
+		TexTHF3->SetMagFilter(MagFilter::Nearest);
 
-		// Load in some textures
-		Texture2D::Sptr    boxTexture   = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
-		Texture2D::Sptr    boxSpec      = ResourceManager::CreateAsset<Texture2D>("textures/box-specular.png");
-		Texture2D::Sptr    monkeyTex    = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
-		Texture2D::Sptr    leafTex      = ResourceManager::CreateAsset<Texture2D>("textures/leaves.png");
-		leafTex->SetMinFilter(MinFilter::Nearest);
-		leafTex->SetMagFilter(MagFilter::Nearest);
-
-
-		// Loading in a 1D LUT
-		Texture1D::Sptr toonLut = ResourceManager::CreateAsset<Texture1D>("luts/toon-1D.png"); 
+		Texture1D::Sptr toonLut = ResourceManager::CreateAsset<Texture1D>("luts/toon-1D.png");
 		toonLut->SetWrap(WrapMode::ClampToEdge);
-
+#pragma endregion
+#pragma region Skybox
 		// Here we'll load in the cubemap, as well as a special shader to handle drawing the skybox
 		TextureCube::Sptr testCubemap = ResourceManager::CreateAsset<TextureCube>("cubemaps/ocean/ocean.jpg");
 		ShaderProgram::Sptr      skyboxShader = ResourceManager::CreateAsset<ShaderProgram>(std::unordered_map<ShaderPartType, std::string>{
@@ -173,108 +152,81 @@ void DefaultSceneLayer::_CreateScene()
 			{ ShaderPartType::Fragment, "shaders/fragment_shaders/skybox_frag.glsl" }
 		});
 
-		// Create an empty scene
-		Scene::Sptr scene = std::make_shared<Scene>(); 
-
 		// Setting up our enviroment map
-		scene->SetSkyboxTexture(testCubemap); 
+		scene->SetSkyboxTexture(testCubemap);
 		scene->SetSkyboxShader(skyboxShader);
 		// Since the skybox I used was for Y-up, we need to rotate it 90 deg around the X-axis to convert it to z-up 
 		scene->SetSkyboxRotation(glm::rotate(MAT4_IDENTITY, glm::half_pi<float>(), glm::vec3(1.0f, 0.0f, 0.0f)));
-
+#pragma endregion
+#pragma region LUTs
 		// Loading in a color lookup table
-		Texture3D::Sptr lut = ResourceManager::CreateAsset<Texture3D>("luts/cool.CUBE");  
+		Texture3D::Sptr lut = ResourceManager::CreateAsset<Texture3D>("luts/cool.cube");
+		Texture3D::Sptr lut2 = ResourceManager::CreateAsset<Texture3D>("luts/warmo.cube");
+		Texture3D::Sptr lut3 = ResourceManager::CreateAsset<Texture3D>("luts/Custom.cube");
 
 		// Configure the color correction LUT
-		scene->SetColorLUT(lut);
-
-		// Create our materials
-		// This will be our box material, with no environment reflections
-		Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>(basicShader);
+		scene->SetColorLUT(lut, 1);
+		scene->SetColorLUT(lut2, 2);
+		scene->SetColorLUT(lut3, 3);
+#pragma endregion
+#pragma region CreateMaterials
+		Material::Sptr THR1Mat = ResourceManager::CreateAsset<Material>(basicShader);
 		{
-			boxMaterial->Name = "Box";
-			boxMaterial->Set("u_Material.Diffuse", boxTexture);
-			boxMaterial->Set("u_Material.Shininess", 0.1f);
+			THR1Mat->Name = "THR1";
+			THR1Mat->Set("u_Material.Diffuse", TexTHR1);
+			THR1Mat->Set("u_Material.Shininess", 0.0f);
+			THR1Mat->Set("u_Material.toonTex", toonLut);
 		}
 
-		// This will be the reflective material, we'll make the whole thing 90% reflective
-		Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>(reflectiveShader);
+		Material::Sptr THR2Mat = ResourceManager::CreateAsset<Material>(basicShader);
 		{
-			monkeyMaterial->Name = "Monkey";
-			monkeyMaterial->Set("u_Material.Diffuse", monkeyTex);
-			monkeyMaterial->Set("u_Material.Shininess", 0.5f);
+			THR2Mat->Name = "THR2";
+			THR2Mat->Set("u_Material.Diffuse", TexTHR2);
+			THR2Mat->Set("u_Material.Shininess", 0.0f);
+			THR2Mat->Set("u_Material.toonTex", toonLut);
 		}
 
-		// This will be the reflective material, we'll make the whole thing 90% reflective
-		Material::Sptr testMaterial = ResourceManager::CreateAsset<Material>(specShader);
+		Material::Sptr THR3Mat = ResourceManager::CreateAsset<Material>(basicShader);
 		{
-			testMaterial->Name = "Box-Specular";
-			testMaterial->Set("u_Material.Diffuse", boxTexture);
-			testMaterial->Set("u_Material.Specular", boxSpec);
+			THR3Mat->Name = "THR3";
+			THR3Mat->Set("u_Material.Diffuse", TexTHR3);
+			THR3Mat->Set("u_Material.Shininess", 0.0f);
+			THR3Mat->Set("u_Material.toonTex", toonLut);
 		}
 
-		// Our foliage vertex shader material
-		Material::Sptr foliageMaterial = ResourceManager::CreateAsset<Material>(foliageShader);
+		Material::Sptr THR4Mat = ResourceManager::CreateAsset<Material>(basicShader);
 		{
-			foliageMaterial->Name = "Foliage Shader";
-			foliageMaterial->Set("u_Material.Diffuse", leafTex);
-			foliageMaterial->Set("u_Material.Shininess", 0.1f);
-			foliageMaterial->Set("u_Material.Threshold", 0.1f);
-
-			foliageMaterial->Set("u_WindDirection", glm::vec3(1.0f, 1.0f, 0.0f));
-			foliageMaterial->Set("u_WindStrength", 0.5f);
-			foliageMaterial->Set("u_VerticalScale", 1.0f);
-			foliageMaterial->Set("u_WindSpeed", 1.0f);
+			THR4Mat->Name = "THR4";
+			THR4Mat->Set("u_Material.Diffuse", TexTHR4);
+			THR4Mat->Set("u_Material.Shininess", 0.0f);
+			THR4Mat->Set("u_Material.toonTex", toonLut);
 		}
 
-		// Our toon shader material
-		Material::Sptr toonMaterial = ResourceManager::CreateAsset<Material>(toonShader);
+		Material::Sptr THF1Mat = ResourceManager::CreateAsset<Material>(basicShader);
 		{
-			toonMaterial->Name = "Toon";
-			toonMaterial->Set("u_Material.Diffuse", boxTexture);
-			toonMaterial->Set("s_ToonTerm", toonLut);
-			toonMaterial->Set("u_Material.Shininess", 0.1f);
-			toonMaterial->Set("u_Material.Steps", 8);
+			THF1Mat->Name = "THF1";
+			THF1Mat->Set("u_Material.Diffuse", TexTHF1);
+			THF1Mat->Set("u_Material.Shininess", 0.0f);
+			THF1Mat->Set("u_Material.toonTex", toonLut);
 		}
 
-
-		Material::Sptr displacementTest = ResourceManager::CreateAsset<Material>(displacementShader);
+		Material::Sptr THF2Mat = ResourceManager::CreateAsset<Material>(basicShader);
 		{
-			Texture2D::Sptr displacementMap = ResourceManager::CreateAsset<Texture2D>("textures/displacement_map.png");
-			Texture2D::Sptr normalMap       = ResourceManager::CreateAsset<Texture2D>("textures/normal_map.png");
-			Texture2D::Sptr diffuseMap      = ResourceManager::CreateAsset<Texture2D>("textures/bricks_diffuse.png");
-
-			displacementTest->Name = "Displacement Map";
-			displacementTest->Set("u_Material.Diffuse", diffuseMap);
-			displacementTest->Set("s_Heightmap", displacementMap);
-			displacementTest->Set("s_NormalMap", normalMap);
-			displacementTest->Set("u_Material.Shininess", 0.5f);
-			displacementTest->Set("u_Scale", 0.1f);
+			THF2Mat->Name = "THF2";
+			THF2Mat->Set("u_Material.Diffuse", TexTHF2);
+			THF2Mat->Set("u_Material.Shininess", 0.0f);
+			THF2Mat->Set("u_Material.toonTex", toonLut);
 		}
 
-		Material::Sptr normalmapMat = ResourceManager::CreateAsset<Material>(tangentSpaceMapping);
+		Material::Sptr THF3Mat = ResourceManager::CreateAsset<Material>(basicShader);
 		{
-			Texture2D::Sptr normalMap       = ResourceManager::CreateAsset<Texture2D>("textures/normal_map.png");
-			Texture2D::Sptr diffuseMap      = ResourceManager::CreateAsset<Texture2D>("textures/bricks_diffuse.png");
-
-			normalmapMat->Name = "Tangent Space Normal Map";
-			normalmapMat->Set("u_Material.Diffuse", diffuseMap);
-			normalmapMat->Set("s_NormalMap", normalMap);
-			normalmapMat->Set("u_Material.Shininess", 0.5f);
-			normalmapMat->Set("u_Scale", 0.1f);
+			THF3Mat->Name = "THF3";
+			THF3Mat->Set("u_Material.Diffuse", TexTHF3);
+			THF3Mat->Set("u_Material.Shininess", 0.0f);
+			THF3Mat->Set("u_Material.toonTex", toonLut);
 		}
-
-		Material::Sptr multiTextureMat = ResourceManager::CreateAsset<Material>(multiTextureShader);
-		{
-			Texture2D::Sptr sand  = ResourceManager::CreateAsset<Texture2D>("textures/terrain/sand.png");
-			Texture2D::Sptr grass = ResourceManager::CreateAsset<Texture2D>("textures/terrain/grass.png");
-
-			multiTextureMat->Name = "Multitexturing";
-			multiTextureMat->Set("u_Material.DiffuseA", sand);
-			multiTextureMat->Set("u_Material.DiffuseB", grass);
-			multiTextureMat->Set("u_Material.Shininess", 0.5f);
-			multiTextureMat->Set("u_Scale", 0.1f);
-		}
+#pragma endregion
+#pragma region Lighting
 
 		// Create some lights for our scene
 		scene->Lights.resize(3);
@@ -288,20 +240,15 @@ void DefaultSceneLayer::_CreateScene()
 		scene->Lights[2].Position = glm::vec3(0.0f, 1.0f, 3.0f);
 		scene->Lights[2].Color = glm::vec3(1.0f, 0.2f, 0.1f);
 
-		// We'll create a mesh that is a simple plane that we can resize later
-		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
-		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
-		planeMesh->GenerateMesh();
-
-		MeshResource::Sptr sphere = ResourceManager::CreateAsset<MeshResource>();
-		sphere->AddParam(MeshBuilderParam::CreateIcoSphere(ZERO, ONE, 5));
-		sphere->GenerateMesh();
+#pragma endregion
+#pragma region CreateObjects
 
 		// Set up the scene's camera
 		GameObject::Sptr camera = scene->MainCamera->GetGameObject()->SelfRef();
 		{
-			camera->SetPostion({ -9, -6, 15 });
+			camera->SetPostion({ 0, 0, 0.23f });
 			camera->LookAt(glm::vec3(0.0f));
+			camera->SetRotation(glm::vec3(75, 0, 0));
 
 			camera->Add<SimpleCameraControl>();
 
@@ -311,6 +258,84 @@ void DefaultSceneLayer::_CreateScene()
 			//scene->MainCamera = cam;
 		}
 
+		GameObject::Sptr THR1Object = scene->CreateGameObject("THR1Object");
+		{
+			THR1Object->SetPostion(glm::vec3(0.0f, 0.0f, 0.0f));
+			THR1Object->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+			THR1Object->SetRotation(glm::vec3(90.0f, 0.0f, 0.0f));
+
+			RenderComponent::Sptr renderer = THR1Object->Add<RenderComponent>();
+			renderer->SetMesh(THR1);
+			renderer->SetMaterial(THR1Mat);
+		}
+
+		GameObject::Sptr THR2Object = scene->CreateGameObject("THR2Object");
+		{
+			THR2Object->SetPostion(glm::vec3(0.0f, 0.0f, 0.0f));
+			THR2Object->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+			THR2Object->SetRotation(glm::vec3(90.0f, 0.0f, 0.0f));
+
+			RenderComponent::Sptr renderer = THR2Object->Add<RenderComponent>();
+			renderer->SetMesh(THR2);
+			renderer->SetMaterial(THR2Mat);
+		}
+
+		GameObject::Sptr THR3Object = scene->CreateGameObject("THR3Object");
+		{
+			THR3Object->SetPostion(glm::vec3(0.0f, 0.0f, 0.0f));
+			THR3Object->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+			THR3Object->SetRotation(glm::vec3(90.0f, 0.0f, 0.0f));
+
+			RenderComponent::Sptr renderer = THR3Object->Add<RenderComponent>();
+			renderer->SetMesh(THR3);
+			renderer->SetMaterial(THR3Mat);
+		}
+
+		GameObject::Sptr THR4Object = scene->CreateGameObject("THR4Object");
+		{
+			THR4Object->SetPostion(glm::vec3(0.0f, 0.0f, 0.0f));
+			THR4Object->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+			THR4Object->SetRotation(glm::vec3(90.0f, 0.0f, 0.0f));
+
+			RenderComponent::Sptr renderer = THR4Object->Add<RenderComponent>();
+			renderer->SetMesh(THR4);
+			renderer->SetMaterial(THR4Mat);
+		}
+
+		GameObject::Sptr THF1Object = scene->CreateGameObject("THF1Object");
+		{
+			THF1Object->SetPostion(glm::vec3(0.0f, 0.0f, 0.0f));
+			THF1Object->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+			THF1Object->SetRotation(glm::vec3(90.0f, 0.0f, 0.0f));
+
+			RenderComponent::Sptr renderer = THF1Object->Add<RenderComponent>();
+			renderer->SetMesh(THF1);
+			renderer->SetMaterial(THF1Mat);
+		}
+
+		GameObject::Sptr THF2Object = scene->CreateGameObject("THF2Object");
+		{
+			THF2Object->SetPostion(glm::vec3(0.0f, 0.0f, 0.0f));
+			THF2Object->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+			THF2Object->SetRotation(glm::vec3(90.0f, 0.0f, 0.0f));
+
+			RenderComponent::Sptr renderer = THF2Object->Add<RenderComponent>();
+			renderer->SetMesh(THF2);
+			renderer->SetMaterial(THF2Mat);
+		}
+
+		GameObject::Sptr THF3Object = scene->CreateGameObject("THF3Object");
+		{
+			THF3Object->SetPostion(glm::vec3(0.0f, 0.0f, 0.0f));
+			THF3Object->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+			THF3Object->SetRotation(glm::vec3(90.0f, 0.0f, 0.0f));
+
+			RenderComponent::Sptr renderer = THF3Object->Add<RenderComponent>();
+			renderer->SetMesh(THF3);
+			renderer->SetMaterial(THF3Mat);
+		}
+
+		/*
 		// Set up all our sample objects
 		GameObject::Sptr plane = scene->CreateGameObject("Plane");
 		{
@@ -325,7 +350,7 @@ void DefaultSceneLayer::_CreateScene()
 			renderer->SetMaterial(boxMaterial);
 
 			// Attach a plane collider that extends infinitely along the X/Y axis
-			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
+			RigidBody::Sptr physics = plane->Add<RigidBody>(static by default);
 			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
 		}
 
@@ -465,6 +490,7 @@ void DefaultSceneLayer::_CreateScene()
 
 			trigger->Add<TriggerVolumeEnterBehaviour>();
 		}
+		*/
 
 		/////////////////////////// UI //////////////////////////////
 		/*
@@ -505,8 +531,16 @@ void DefaultSceneLayer::_CreateScene()
 		GameObject::Sptr particles = scene->CreateGameObject("Particles");
 		{
 			ParticleSystem::Sptr particleManager = particles->Add<ParticleSystem>();  
-			particleManager->AddEmitter(glm::vec3(0.0f), glm::vec3(0.0f, -1.0f, 10.0f), 10.0f, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)); 
+			particleManager->AddEmitter(glm::vec3(0.01f, 0.0f, 4.0f), glm::vec3(-0.01f, 1.0f, -0.5f), 10.0f, glm::vec4(0.5608f, 0.4706f, 0.5323f, 1.0f));
+			particleManager->AddEmitter(glm::vec3(-0.1f, 0.0f, 4.0f), glm::vec3(0.1f, 1.0f, -0.5f), 10.0f, glm::vec4(0.5608f, 0.4706f, 0.5323f, 1.0f));
+			particleManager->AddEmitter(glm::vec3(0.1f, 0.0f, 4.0f), glm::vec3(-0.1f, 1.0f, -0.5f), 10.0f, glm::vec4(0.5608f, 0.4706f, 0.5323f, 1.0f));
+			particleManager->AddEmitter(glm::vec3(-0.5f, 0.0f, 4.0f), glm::vec3(0.5f, 1.0f, -0.5f), 10.0f, glm::vec4(0.5608f, 0.4706f, 0.5323f, 1.0f));
+			particleManager->AddEmitter(glm::vec3(0.5f, 0.0f, 4.0f), glm::vec3(-0.5f, 1.0f, -0.5f), 10.0f, glm::vec4(0.5608f, 0.4706f, 0.5323f, 1.0f));
+
+			//camera->AddChild();
 		}
+
+#pragma endregion
 
 		GuiBatcher::SetDefaultTexture(ResourceManager::CreateAsset<Texture2D>("textures/ui-sprite.png"));
 		GuiBatcher::SetDefaultBorderRadius(8);

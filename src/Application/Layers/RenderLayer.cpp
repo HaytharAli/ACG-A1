@@ -68,8 +68,17 @@ void RenderLayer::OnRender(const Framebuffer::Sptr& prevLayer)
 		environment->Bind(15);
 	}
 
+	Texture3D::Sptr colorLUT;
 	// Binding the color correction LUT
-	Texture3D::Sptr colorLUT = app.CurrentScene()->GetColorLUT();
+	if (_renderFlags == RenderFlags::EnableColorCorrection) {
+		colorLUT = app.CurrentScene()->GetColorLUT(1);
+	}
+	if (_renderFlags == RenderFlags::EnableWarm) {
+		colorLUT = app.CurrentScene()->GetColorLUT(2);
+	}
+	if (_renderFlags == RenderFlags::EnableBlackAndWhite) {
+		colorLUT = app.CurrentScene()->GetColorLUT(3);
+	}
 	if (colorLUT) {
 		colorLUT->Bind(14);
 	}
@@ -163,8 +172,8 @@ void RenderLayer::OnAppLoad(const nlohmann::json& config)
 
 	// GL states, we'll enable depth testing and backface fulling
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
 
 	// Create a new descriptor for our FBO
 	FramebufferDescriptor fboDescriptor;

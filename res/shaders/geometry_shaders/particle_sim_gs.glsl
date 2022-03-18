@@ -46,7 +46,7 @@ void main() {
             while ((lifetime < 0) && (emitted < 32)) {
                 out_Type = TYPE_PARTICLE;
                 out_Position = inPosition[0] + inVelocity[0] * (-lifetime);
-                out_Velocity = inVelocity[0];
+                out_Velocity = vec3(inVelocity[0].x, rand(vec2(inVelocity[0].x, u_DeltaTime)), -0.2); //inVelocity[0];
                 out_Lifetime = meta.z + (meta.w - meta.z) * rand(vec2(inPosition[0].x, u_DeltaTime));
                 out_Metadata = vec4(0, 0, 0, 0);
                 out_Color    = inColor[0];
@@ -78,7 +78,7 @@ void main() {
 
                 // Update position and apply forces
                 out_Position = inPosition[0] + inVelocity[0] * u_DeltaTime;
-                out_Velocity = inVelocity[0] + (u_Gravity * u_DeltaTime);
+                out_Velocity = inVelocity[0] + (u_Gravity * 0.02f * u_DeltaTime);
                 
                 // Update lifetime
                 out_Lifetime = lifetime;

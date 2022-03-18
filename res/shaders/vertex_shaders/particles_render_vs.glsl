@@ -10,5 +10,5 @@ layout (location = 0) out vec4 fragColor;
 void main() {
     gl_Position = u_ViewProjection * vec4(inPosition, 1);
     fragColor = inColor;
-    gl_PointSize = 10.0; 
+    gl_PointSize = 5.0; 
 }

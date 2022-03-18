@@ -183,6 +183,8 @@ void Application::_Run()
 
 	// Infinite loop as long as the application is running
 	while (_isRunning) {
+
+
 		// Handle scene switching
 		if (_targetScene != nullptr) {
 			_HandleSceneChange();
@@ -211,6 +213,47 @@ void Application::_Run()
 		timing._unscaledTimeSinceAppLoad += dt;
 		timing._timeSinceSceneLoad += scaledDt;
 		timing._unscaledTimeSinceSceneLoad += dt;
+
+		if (InputEngine::GetKeyState(GLFW_KEY_1) == ButtonState::Pressed) {
+			GetLayer<RenderLayer>()->SetRenderFlags(RenderFlags::Diffuse);
+			//std::cout << "Working" << std::endl;
+		}
+		if (InputEngine::GetKeyState(GLFW_KEY_2) == ButtonState::Pressed) {
+			GetLayer<RenderLayer>()->SetRenderFlags(RenderFlags::Ambient);
+			//std::cout << "Working" << std::endl;
+		}
+		if (InputEngine::GetKeyState(GLFW_KEY_3) == ButtonState::Pressed) {
+			GetLayer<RenderLayer>()->SetRenderFlags(RenderFlags::Specular);
+			//std::cout << "Working" << std::endl;
+		}
+		if (InputEngine::GetKeyState(GLFW_KEY_4) == ButtonState::Pressed) {
+			GetLayer<RenderLayer>()->SetRenderFlags(RenderFlags::AmbientSpecular);
+			//std::cout << "Working" << std::endl;
+		}
+		if (InputEngine::GetKeyState(GLFW_KEY_5) == ButtonState::Pressed) {
+			GetLayer<RenderLayer>()->SetRenderFlags(RenderFlags::AmbientSpecularCustom);
+			//std::cout << "Working" << std::endl;
+		}
+		if (InputEngine::GetKeyState(GLFW_KEY_6) == ButtonState::Pressed) {
+			GetLayer<RenderLayer>()->SetRenderFlags(RenderFlags::EnableToonDiffuse);
+			//std::cout << "Working" << std::endl;
+		}
+		if (InputEngine::GetKeyState(GLFW_KEY_7) == ButtonState::Pressed) {
+			GetLayer<RenderLayer>()->SetRenderFlags(RenderFlags::EnableToonSpecular);
+			//std::cout << "Working" << std::endl;
+		}
+		if (InputEngine::GetKeyState(GLFW_KEY_8) == ButtonState::Pressed) {
+			GetLayer<RenderLayer>()->SetRenderFlags(RenderFlags::EnableWarm);
+			//std::cout << "Working" << std::endl;
+		}
+		if (InputEngine::GetKeyState(GLFW_KEY_9) == ButtonState::Pressed) {
+			GetLayer<RenderLayer>()->SetRenderFlags(RenderFlags::EnableColorCorrection);
+			//std::cout << "Working" << std::endl;
+		}
+		if (InputEngine::GetKeyState(GLFW_KEY_0) == ButtonState::Pressed) {
+			GetLayer<RenderLayer>()->SetRenderFlags(RenderFlags::EnableBlackAndWhite);
+			//std::cout << "Working" << std::endl;
+		}
 
 		ImGuiHelper::StartFrame();
 
