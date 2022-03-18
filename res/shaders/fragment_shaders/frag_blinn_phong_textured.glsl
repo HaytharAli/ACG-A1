@@ -15,6 +15,7 @@ layout(location = 0) out vec4 frag_color;
 struct Material {
 	sampler2D Diffuse;
 	float     Shininess;
+	sampler1D toonTex;
 };
 // Create a uniform for the material
 uniform Material u_Material;
@@ -43,8 +44,10 @@ void main() {
 	// Get the albedo from the diffuse / albedo map
 	vec4 textureColor = texture(u_Material.Diffuse, inUV);
 
-	// combine for the final result
-	vec3 result = lightAccumulation  * inColor * textureColor.rgb;
+	vec3 newLight = inLight;
 
-	frag_color = vec4(ColorCorrect(result), textureColor.a);
+	// combine for the final result
+	vec3 result = newLight  * inColor * textureColor.rgb;
+
+	frag_color = vec4(ColorCorrect(mix(result, vec3(0.3647, 0.3412, 0.4), inFog)), textureColor.a);
 }

@@ -7,6 +7,7 @@
 struct Material {
 	sampler2D Diffuse;
 	float     Shininess;
+	sampler1D toonTex;
 };
 // Create a uniform for the material
 uniform Material u_Material;
